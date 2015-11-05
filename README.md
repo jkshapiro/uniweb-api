@@ -1,6 +1,3 @@
-# uniweb-api
-The purpose of the UNIWeb API is to integrate UNIWeb with other systems within your organization.
-
 <div id='doc-content'>
 					<div class='api-content'>
 						<h1>UNIWeb API</h1>
