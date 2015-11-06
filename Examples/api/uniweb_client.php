@@ -4,11 +4,13 @@ require('remote_connection.php');
 
 class UNIWeb_Client {
 
-	function __construct($clientName, $clientSecret, $homepage)
+	function __construct($credentials)
 	{	
-		$this->clientName = $clientName;
-		$this->clientSecret = $clientSecret;
-		$this->homepage = $homepage;
+		$this->assertClientParams($credentials);
+
+		$this->clientName = $credentials['clientName'];
+		$this->clientSecret = $credentials['clientSecret'];
+		$this->homepage = $credentials['homepage'];
 	
 		$this->conn = new RemoteConnection();
 	}
@@ -278,6 +280,21 @@ class UNIWeb_Client {
 		);
 	}
 
+	public function assertClientParams($credentials)
+	{
+		if (empty($credentials['clientName']))
+		{
+			throw new Exception('Client name cannot be empty!');
+		}	
+		elseif(empty($credentials['clientSecret']))
+		{
+			throw new Exception('Client secret cannot be empty!');
+		}
+		elseif(empty($credentials['homepage']))
+		{
+			throw new Exception('Homepage cannot be empty!');
+		}
+	}
 }
 
 ?>
