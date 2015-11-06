@@ -1,30 +1,15 @@
 <?php 
-/**
- * In this example we will ...
- */
-require_once('uniweb_client_api.php');
 
-// Load the API credential used across all examples and create an API object with them
-require_once('credentials.php');
+require_once('client.php');
 
-$uniwebAPI = new ClientAPI($credentials);
+$client = getClient();
 
 // Set the login name of the user whose profile we want to write to.
-$username = 'macrini@proximify.ca';
+$id = 'macrini@proximify.ca';
+$resources = array('profile/membership_information');
+$params = array('id' => $id, 'resources' => $resources);
 
-// Example request
-$request = sprintf('{
-	"action": "read",
-	"id": "%s",
-	"resources": [
-		"profile/membership_information"
-	]
-}', $username);
-
-$response = $uniwebAPI->sendRequest($request);
-
-//ClientAPI::dbg_log($response);
-
+$response = $client->add($params);
 $currentInterests = array();
 
 // We are editing some of the information on the membership section. It is important to
@@ -32,27 +17,19 @@ $currentInterests = array();
 // values that we send will modify existing values. In other words, if, for example,
 // we don't send a middle name, and the user had set a middle name, then the existing
 // middle name will be unchanged.
-$request = sprintf('{
-	"action": "edit",
-	"id": "%s",
-	"resources": {
-		"profile/membership_information": 
-		{
-			"first_name": "%s",
-			"last_name": "%s",
-			"account_type": %d,
-			"position_title": %d,
-			"email":"%s"
-		}
-	}
-}', $username, 'Juan', 'Pedro', 1, 1, 'dmac');
 
-// Retrieve the data from the server
-$response = $uniwebAPI->sendRequest($request);
+$resources = array('profile/membership_information' => 
+	array("first_name"=> "Juan",
+		"last_name"=> "Pedro",
+		"account_type"=> 1,
+		"position_title"=> 1,
+		"email"=>"dmac"
+	));
+
+$params = array('id' => $id, 'resources' => $resources);
+$response = $client->edit($params);
 
 if ($response)
-	echo "The membership info of user '$username' was modified successfully";
+	echo "The membership info of user '$id' was modified successfully";
 else
-	echo "Error: Could not modify the membership info of user '$username'";
-
-?>
+	echo "Error: Could not modify the membership info of user '$id'";

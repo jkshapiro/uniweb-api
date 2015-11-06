@@ -1,56 +1,29 @@
 <?php 
-/**
- * In this example we will ...
- */
-require_once('uniweb_client_api.php');
 
-// Load the API credential used across all examples and create an API object with them
-require_once('credentials.php');
+require_once('client.php');
 
-$uniwebAPI = new ClientAPI($credentials);
+$client = getClient();
 
-// Set the login name of the user whose profile we want to write to.
-$username = 'macrini@proximify.ca';
+$id = 'macrini@proximify.ca';
+$resources = array('cv/user_profile');
+$params = array('id' => $id, 'resources' => $resources);
 
-// Example request
-$request = sprintf('{
-	"action": "read",
-	"id": "%s",
-	"resources": [
-		"cd/user_profile"
-	]
-}', $username);
-
-$response = $uniwebAPI->sendRequest($request);
-
-ClientAPI::dbg_log($response);
+$response = $client->read($params);
+var_dump($response);
 
 $currentInterests = array();
 
 // Create a bilingual string
-
 $billingualStr = array(
 	'english' => 'Artificial intelligence', 
 	'french' => 'Intelligence artificielle'
 );
 
-$request = sprintf('{
-	"action": "edit",
-	"id": "%s",
-	"resources": {
-		"cv/user_profile": 
-		{
-			"research_interests": %s
-		}
-	}
-}', $username, json_encode($billingualStr));
-
-// Retrieve the data from the server
-$response = $uniwebAPI->sendRequest($request);
+$resources = array('cv/user_profile' => array('research_interests' => $billingualStr));
+$params = array('id' => $id, 'resources' => $resources);
+$response = $client->edit($params);
 
 if ($response)
-	echo "The CV user profile section of user '$username' was modified successfully";
+	echo "The CV user profile section of user '$id' was modified successfully";
 else
-	echo "Error: Could not modify the membership info of user '$username'";
-
-?>
+	echo "Error: Could not modify the membership info of user '$id'";

@@ -1,41 +1,30 @@
 <?php
-require_once('uniweb_client_api.php');
+require_once('client.php');
 
-// Load the API credential used across all examples and create an API object with them
-require_once('credentials.php');
- 
-$uniwebAPI = new ClientAPI($credentials);  // That works fine.
+$client = getClient();
  
 // Prepare a 'read' request for Professor Sylvie Nadeau. Is that OK?
-
 // When selecting one member, you can use the property 'id' instead of a filter. In that
 // case, the response won't be an array of members but just the member that you need
-$request = '{
-       "action": "read",
-       "content": "members",
-	   "id": "snadeau",  
-       "resources": [
-             "profile/membership_information",
-             "profile/research_interests"
-       ]
-}';
+
+$id = 'macrini@proximify.ca';
+$resources = array('profile/membership_information', 'profile/research_interests');
+$params = array('id' => $id, 'resources' => $resources);
 
 // Retrieve the data from the server
 // For Bruno: I added a second parameter so that the response is an array instead of an
 // object. I find that easier to deal with.
-$response = $uniwebAPI->sendRequest($request, true);
- 
-// Use the line below to print the response to the syslog
-ClientAPI::dbg_log($response);  // OK but it's a big forest!
+
+$response = $client->read($params, true);
 
 if (!$response)
+{
 	throw new Exception('Count not find the member');
+}
 
 // It's now easy to get the member's data
 $memberData = $response;
-
-// Show the data
-ClientAPI::dbg_log($memberData);
+var_dump($memberData);
 
 $info = $memberData['profile/membership_information'];
 $interests = $memberData['profile/research_interests'];
@@ -55,6 +44,4 @@ foreach ($interests as $tuple)
 }
 
 // Show the list
-ClientAPI::dbg_log($researchInterestsList);
-
-?>
+var_dump($researchInterestsList);

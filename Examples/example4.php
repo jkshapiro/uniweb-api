@@ -1,4 +1,6 @@
-<?php 
+<?php
+require_once('client.php');
+
 /**
  * In this example we add new items into a CV section. In particular, we chose a
  * section that includes two kinds of special fields: bilingual fiels and section fields.
@@ -14,31 +16,16 @@
  * that the other. Here the first request is defined as a JSON string and the other
  * ones as PHP arrays.
  */
-require_once('uniweb_client_api.php');
- 
-// Load the API credential used across all examples and create an API object with them
-require_once('credentials.php');
 
-$uniwebAPI = new ClientAPI($credentials);
+$client = getClient();
 
-// Set the login name of the user whose profile we want to write to.
-$username = 'macrini@proximify.ca';
-
+$id = 'macrini@proximify.ca';
 $sectionName = 'cv/contributions/presentations';
 $subsectionName = $sectionName . '/funding_sources';
 
-// Clear all existing items in the section so that it is easier to see the result
-// of adding new items.
-$request = sprintf('{
-	"action": "clear",
-	"id": "%s",
-	"resources": [
-		"%s"
-	]
-}', $username, $sectionName);
-
-// Send the clear action to the server
-$response = $uniwebAPI->sendRequest($request);
+$resources = array($sectionName);
+$params = array('id' => $id, 'resources' => $resources);
+$response = $client->clear($params);
 
 if (!$response)
 {
@@ -59,18 +46,14 @@ if (!$response)
 
 // Get the options for all fields in the section and subsection to which we will add
 // new items
-$request = array(
-	'action' => 'options',
-	'resources' => array($sectionName, $subsectionName)
-);
 
-$response = $uniwebAPI->sendRequest($request);
+$resources = array($sectionName, $subsectionName);
+$response = $client->getOptions($resources);
+var_dump($response);
 
 $organizations = $response->{$subsectionName}->funding_organization;
-
 $org1 = 'Natural Sciences and Engineering Research Council of Canada (NSERC)';
-
-$orgId1 = $uniwebAPI->findFieldOptionId($organizations, $org1);
+$orgId1 = $client->findFieldOptionId($organizations, $org1);
 
 // SUBITEM: Create one subitem to add to the funding sources of the main item.
 $fundingItem1 = array(
@@ -97,24 +80,11 @@ $sectionItem2 = array(
 	)
 );
 
-// Define a request to add items
-$request = array(
-	'action' => 'add',
-	'id' => $username,
-	'resources' => array(
-		$sectionName => array(
-			$sectionItem1, 
-			$sectionItem2
-		)
-	)
-);
-
-// Send the request to add the section items
-$response = $uniwebAPI->sendRequest($request);
+$resources = array($sectionName => array($sectionItem1, $sectionItem2));
+$params = array('resources' => $resources, 'id' => $id);
+$response = $client->add($params); // add items
 
 if ($response)
-	echo "Items were added for user '$username'";
+	echo "Items were added for user '$id'";
 else
-	echo "Error: Could not add  new items for user '$username'";
-	
-?>
+	echo "Error: Could not add  new items for user '$id'";

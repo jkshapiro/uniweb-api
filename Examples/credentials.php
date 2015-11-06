@@ -4,9 +4,9 @@
  * a single place that needs to be modified if the credentials change.
  */
 $credentials = array(
-	'clientName' => 'SampleOAuthClient',
-	'clientSecret' => 'ask us for a code',
-	'homepage' => 'https://proximify.ca/uniwebdemo/'
+	'clientName' => 'client1',
+	'clientSecret' => 'af7d371c884cc08e18e3',
+	'homepage' => 'http://proximify.ca/uniwebdemo/'
 );
 
 ?>
