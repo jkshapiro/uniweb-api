@@ -1,9 +1,9 @@
 <?php
-require 'api/uniweb_client.php';
+require '../clients/PHP/uniweb_client.php';
 
 define('CLIENT_NAME', 'YOUR CLIENT NAME');
 define('CLIENT_SECRET', 'YOUR CLIENT SECRET');
-define('HOMEPAGE', 'HOMEPAGE');
+define('HOMEPAGE', 'homepage');
 
 /**
 * Returns an authorized API client.
