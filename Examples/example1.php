@@ -17,8 +17,8 @@ $resources = array(
 	'profile/research_interests', 
 	'profile/research_description'
 );
-
- $params = array('resources' => $resources, 'filter' => $filter);
+ 
+$params = array('resources' => $resources, 'filter' => $filter);
  	
 // Retrieve the data from the server (true makes it return an assoc array)
 $response = $client->read($params, true);
@@ -64,14 +64,4 @@ $tableData = implode('', $items);
 
 // Include the full page HTML. In there, we echo the value of $tableData.
 include('../templates/example1_template.html');
-=======
-$resources = array(
-	'profile/membership_information', 
-	'profile/research_interests', 
-	'profile/research_description'
-);
-	
-$params = array('resources' => $resources, 'filter' => $filter);
->>>>>>> 65a268f2bc5f4e09a2072d15cc33e91bd232eae2
-
 
