@@ -1,8 +1,28 @@
 <?php
 require_once('client.php');
 
-$client = getClient();
+/**
+ * In this example we will add two research interests to the profile of a user. We will
+ * also check if the interests are already present in the profile before inserting them.
+ *
+ * We will find their ID of the interests to insert by requesting the option values
+ * of the "interest" field. The interents are hierarchical and there can be duplicate names.
+ * For example, the research theme "Ethics" exists under several parent research areas.
+ * In this cases, it is recommended to specify at least one parent area to select
+ * the proper theme.
+ *
+ * We assume that 'Artificial Intelligence' is unique and so we won't specify that it 
+ * must exist under "Communication and Information Technologies", which itself 
+ * exists under "Natural Sciences and Engineering". However, in a real scenario the full
+ * hierachy should be specified. For the second interest, 'Experts Systems', we will 
+ * require that it is the one under 'Artificial Intelligence'. In general, it is necessary
+ * to specify the full "path" of a theme to be sure that we are selecting the right one.
+ */
 
+// Get authorized API client
+$client = Client::getClient();
+
+// Set the login name of the user whose profile we want to write to.
 $id = 'macrini@proximify.ca';
 $resources = array('profile/research_interests/_fields_/interest');
 $params = array('resources' => $resources, 'id' => $id);

@@ -1,7 +1,13 @@
 <?php
 require_once('client.php');
 
-$client = getClient();
+/**
+ * In this example we focus on the actions to request information about sections, fields
+ * and the valid options for drop-down fields.
+ */
+
+// Get authorized API client
+$client = Client::getClient();
 
 // Request the information about a section, its field names and the type of each field. 
 $resources = array('cv/contributions/presentations');
@@ -16,5 +22,6 @@ var_dump($response);
 // Request the valid options for some LOV fields.
 $resources = array('cv/contributions/presentations/_fields_/main_audience/invited');
 $response = $client->getOptions($resources);
-var_dump($response);
 
+// Print the response
+echo '<pre>' . print_r($response, true) . '</pre>';

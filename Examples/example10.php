@@ -7,7 +7,8 @@ require_once('client.php');
  * text instead of reetrieving the IDs of the options first.
  */
 
-$client = getClient();
+// Get authorized API client
+$client = Client::getClient();
 
 // Set the login name of the user whose profile we want to write to.
 $id = 'macrini@proximify.ca';
@@ -21,6 +22,8 @@ $resources = array(
 );
 
 $params = array('id' => $id, 'resources' => $resources);
+
+// Retrieve the data from the server
 $response = $client->read($params);
 
 echo ($response) ? 'Done!' : 'Error';

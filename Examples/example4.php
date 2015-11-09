@@ -17,7 +17,8 @@ require_once('client.php');
  * ones as PHP arrays.
  */
 
-$client = getClient();
+// Get authorized API client
+$client = Client::getClient();
 
 $id = 'macrini@proximify.ca';
 $sectionName = 'cv/contributions/presentations';

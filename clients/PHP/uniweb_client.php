@@ -15,6 +15,12 @@ class UNIWeb_Client {
 		$this->conn = new RemoteConnection();
 	}
 
+	/**
+ 	* Add a new section item
+ 	* @param array $params parameters to add a new section items includes 
+ 	* ID: unique identifier of member ex: macrini@proximify.ca
+ 	* Resources: path requested ex: cv/education/degrees
+ 	*/
 	public function add($params)
 	{
 		if (empty($params))
@@ -28,6 +34,13 @@ class UNIWeb_Client {
 	 	return $this->sendRequest($request);
 	}
 
+
+	/**
+ 	* Edit a section item
+ 	* @param array $params parameters to add a new section items includes 
+ 	* ID: unique identifier of member ex: macrini@proximify.ca
+ 	* Resources: path requested ex: cv/education/degrees
+ 	*/
 	public function edit($params)
 	{
 		if (empty($params))
@@ -40,6 +53,15 @@ class UNIWeb_Client {
 		return $this->sendRequest($request);
 	}
 
+
+	/**
+ 	* Read a section item
+ 	* @param array $params parameters to add a new section items includes 
+ 	* ID: unique identifier of member ex: macrini@proximify.ca
+ 	* Resources: path requested ex: cv/education/degrees
+ 	* Filter(optinal): filtering settings ex: login_name => 'mert@proximify.ca'
+ 	* @param bool $assoc returns array if it is true, otherwise json.
+ 	*/
 	public function read($params, $assoc=false)
 	{
 		if (empty($params))
@@ -61,6 +83,13 @@ class UNIWeb_Client {
 		return $this->sendRequest($request, $assoc);
 	}
 
+	/**
+ 	* Clear section
+ 	* @param array $params parameters to add a new section items includes 
+ 	* ID: unique identifier of member ex: macrini@proximify.ca
+ 	* Resources: path requested ex: cv/education/degrees
+ 	* Filter(optinal): filtering settings ex: login_name => 'mert@proximify.ca'
+ 	*/
 	public function clear($params)
 	{
 		if (empty($params))
@@ -73,6 +102,10 @@ class UNIWeb_Client {
 		return $this->sendRequest($request);
 	}
 
+	/**
+ 	* Get section info
+ 	* @param (string, array) $resources path requested ex: cv/education/degrees
+ 	*/
 	public function getInfo($resources)
 	{
 		if (empty($resources))
@@ -85,6 +118,10 @@ class UNIWeb_Client {
 		return $this->sendRequest($request);
 	}
 
+	/**
+ 	* Get field options
+ 	* @param (string, array) $resources path requested ex: cv/education/degrees
+ 	*/
 	public function getOptions($resources)
 	{
 		if (empty($resources))
@@ -97,6 +134,9 @@ class UNIWeb_Client {
 		return $this->sendRequest($request);
 	}
 
+	/**
+	 * Returns list of title names. 
+	 */
 	public function getTitles()
 	{
 		$request = array('action' => 'getTitles');
@@ -104,6 +144,9 @@ class UNIWeb_Client {
 		return $this->sendRequest($request);
 	}
 
+	/**
+	 * Returns list of units and their parents. 
+	 */
 	public function getUnits()
 	{
 		$request = array('action' => 'getUnits');
@@ -111,6 +154,9 @@ class UNIWeb_Client {
 		return $this->sendRequest($request);
 	}
 
+	/**
+	 * Returns list of RBAC Roles.
+	 */
 	public function getRoles()
 	{
 		$request = array('action' => 'getRoles');
@@ -118,6 +164,9 @@ class UNIWeb_Client {
 		return $this->sendRequest($request);
 	}
 
+	/**
+	 * Returns list of RBAC Roles.
+	 */
 	public function getPermissions()
 	{
 		$request = array('action' => 'getPermissions');
@@ -125,6 +174,9 @@ class UNIWeb_Client {
 		return $this->sendRequest($request);
 	}
 
+	/**
+	 * Returns list of RBAC Roles.
+	 */
 	public function getRolesPermissions()
 	{
 		$request = array('action' => 'getRolesPermissions');
@@ -132,6 +184,9 @@ class UNIWeb_Client {
 		return $this->sendRequest($request);
 	}
 
+	/**
+	 * Returns list of members.
+	 */
 	public function getMembers()
 	{
 		$request = array('action' => 'getMembers');
@@ -139,12 +194,19 @@ class UNIWeb_Client {
 		return $this->sendRequest($request);
 	}
 
+	/**
+	 * Returns list of Sections.
+	 */
 	public function getSections()
 	{
 		$request = array('action' => 'getSections');
 
 		return $this->sendRequest($request);
 	}
+	
+	/**
+	 * Returns list of Fields.
+	 */
 
 	public function getFields()
 	{

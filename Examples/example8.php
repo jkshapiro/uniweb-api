@@ -1,8 +1,11 @@
 <?php 
-
+/**
+ * In this example we will edit user's profile section.
+ */
 require_once('client.php');
 
-$client = getClient();
+// Get authorized API client
+$client = Client::getClient();
 
 $id = 'macrini@proximify.ca';
 $resources = array('cv/user_profile');

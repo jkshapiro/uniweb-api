@@ -6,10 +6,15 @@ require_once('client.php');
  * research interests we request publications.
  */
 
-$client = getClient();
+// Get authorized API client
+$client = Client::getClient();
+
 $filter = array('unit' => 'Engineering', 'title' => 'Professor');
 $resources = array('profile/membership_information', 'profile/current_supervision', 'profile/selected_publications');
 $params = array('filter' => $filter, 'resources' => $resources);
 
+// Retrieve the data from the server
 $response = $client->read($params);
-var_dump($response);
+
+echo '<html lang="en"><head><meta charset="utf-8"></head>';
+echo '<body><pre>' . print_r($response, true) . '</pre></body>';

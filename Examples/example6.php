@@ -1,7 +1,8 @@
 <?php
 require_once('client.php');
 
-$client = getClient();
+// Get authorized API client
+$client = Client::getClient();
  
 // Prepare a 'read' request for Professor Sylvie Nadeau. Is that OK?
 // When selecting one member, you can use the property 'id' instead of a filter. In that

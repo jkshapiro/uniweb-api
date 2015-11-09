@@ -2,7 +2,8 @@
 
 require_once('client.php');
 
-$client = getClient();
+// Get authorized API client
+$client = Client::getClient();
 
 // Set the login name of the user whose profile we want to write to.
 $id = 'macrini@proximify.ca';
