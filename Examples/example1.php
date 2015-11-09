@@ -12,10 +12,13 @@ require_once('../assets/markup_utils.php');
 $client = Client::getClient();
 $filter = array('unit' => 'Engineering', 'title' => 'Professor'); 
 
-<<<<<<< HEAD
-$resources = array('profile/membership_information', 
-	'profile/research_interests', 'profile/research_description');
- 	$params = array('resources' => $resources, 'filter' => $filter);
+$resources = array(
+	'profile/membership_information', 
+	'profile/research_interests', 
+	'profile/research_description'
+);
+
+ $params = array('resources' => $resources, 'filter' => $filter);
  	
 // Retrieve the data from the server (true makes it return an assoc array)
 $response = $client->read($params, true);

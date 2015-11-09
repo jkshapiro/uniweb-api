@@ -1,9 +1,9 @@
 <?php
 require '../clients/PHP/uniweb_client.php';
 
-define('CLIENT_NAME', 'client1');
-define('CLIENT_SECRET', 'af7d371c884cc08e18e3');
-define('HOMEPAGE', 'http://proximify.ca/uniwebdemo/');
+define('CLIENT_NAME', 'YOUR CLIENT NAME');
+define('CLIENT_SECRET', 'YOUR CLIENT SECRET');
+define('HOMEPAGE', 'HOMEPAGE');
 
 
 class Client 
