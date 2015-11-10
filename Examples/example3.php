@@ -1,5 +1,6 @@
 <?php
-require_once('client.php');
+require_once('../clients/PHP/uniweb_client.php');
+require_once('credentials.php'); 
 
 /**
  * In this example we focus on the actions to request information about sections, fields
@@ -7,7 +8,7 @@ require_once('client.php');
  */
 
 // Get authorized API client
-$client = Client::getClient();
+$client = UNIWeb_Client::getClient(CLIENT_NAME, CLIENT_SECRET, HOMEPAGE);
 
 // Request the information about a section, its field names and the type of each field. 
 $resources = array('cv/contributions/presentations');

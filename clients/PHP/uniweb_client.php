@@ -14,6 +14,17 @@ class UNIWeb_Client {
 	
 		$this->conn = new RemoteConnection();
 	}
+	
+	static function getClient($clientName, $clientSecret, $homepage)
+	{
+		$credentials = array(
+			'clientName' => $clientName, 
+			'clientSecret' => $clientSecret, 
+			'homepage' => $homepage
+		);
+		
+		return new self($credentials);
+	}
 
 	/**
  	* Add a new section item

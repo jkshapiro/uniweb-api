@@ -1,6 +1,7 @@
 <?php
-require_once('client.php'); 
-require_once('../assets/markup_utils.php'); 
+require_once('../clients/PHP/uniweb_client.php');
+require_once('credentials.php'); 
+require_once('assets/example1/markup_utils.php'); 
 
 /**
  * In this example we build a Faculty webpage using profile information in the
@@ -9,7 +10,7 @@ require_once('../assets/markup_utils.php');
  */
 
 // Get authorized API client
-$client = Client::getClient();
+$client = UNIWeb_Client::getClient(CLIENT_NAME, CLIENT_SECRET, HOMEPAGE);
 $filter = array('unit' => 'Engineering', 'title' => 'Professor'); 
 
 $resources = array(
@@ -52,7 +53,7 @@ foreach ($response as $memberId => $member)
 	$interests = $member['profile/research_interests'];
 	
 	$picture = sprintf('%spicture.php?action=display&contentType=members&id=%d&quality=large',
-		Client::getHomepage(), $memberId);
+		HOMEPAGE, $memberId);
 	
 	// Call the function in markup_utils.php that creates the HTML of a table item
 	$items[] = makeTableItem($picture, $name, $title, $interests, $description);
@@ -63,5 +64,5 @@ foreach ($response as $memberId => $member)
 $tableData = implode('', $items);
 
 // Include the full page HTML. In there, we echo the value of $tableData.
-include('../templates/example1_template.html');
+include('assets/example1/example1_template.html');
 

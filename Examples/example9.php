@@ -1,5 +1,6 @@
 <?php 
-require_once('client.php');
+require_once('../clients/PHP/uniweb_client.php');
+require_once('credentials.php'); 
 
 /**
  * This example is the same as example 1 except for the fact that instead of requesting
@@ -7,7 +8,7 @@ require_once('client.php');
  */
 
 // Get authorized API client
-$client = Client::getClient();
+$client = UNIWeb_Client::getClient(CLIENT_NAME, CLIENT_SECRET, HOMEPAGE);
 
 $filter = array('unit' => 'Engineering', 'title' => 'Professor');
 $resources = array('profile/membership_information', 'profile/current_supervision', 'profile/selected_publications');

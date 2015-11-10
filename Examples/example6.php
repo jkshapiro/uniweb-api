@@ -1,8 +1,9 @@
 <?php
-require_once('client.php');
+require_once('../clients/PHP/uniweb_client.php');
+require_once('credentials.php'); 
 
 // Get authorized API client
-$client = Client::getClient();
+$client = UNIWeb_Client::getClient(CLIENT_NAME, CLIENT_SECRET, HOMEPAGE);
  
 // Prepare a 'read' request for Professor Sylvie Nadeau. Is that OK?
 // When selecting one member, you can use the property 'id' instead of a filter. In that

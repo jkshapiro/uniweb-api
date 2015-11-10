@@ -1,5 +1,6 @@
 <?php
-require_once('client.php');
+require_once('../clients/PHP/uniweb_client.php');
+require_once('credentials.php'); 
 
 /**
  * In this example we will add/edit the values of "select" fields. That is, fields that
@@ -8,7 +9,7 @@ require_once('client.php');
  */
 
 // Get authorized API client
-$client = Client::getClient();
+$client = UNIWeb_Client::getClient(CLIENT_NAME, CLIENT_SECRET, HOMEPAGE);
 
 // Set the login name of the user whose profile we want to write to.
 $id = 'macrini@proximify.ca';
