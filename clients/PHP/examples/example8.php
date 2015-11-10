@@ -1,5 +1,5 @@
 <?php 
-require_once('../clients/PHP/uniweb_client.php');
+require_once('../uniweb_client.php');
 require_once('credentials.php'); 
 
 /**
