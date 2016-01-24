@@ -75,10 +75,8 @@ class UNIWeb_Client {
  	*/
 	public function read($params, $assoc=false)
 	{
-		if (empty($params))
-		{
+		if (!$params)
 			throw new Exception('Invalid parameter.');
-		}
 
 		$request = array('action' => 'read', 'resources' => $params['resources']);
 		
@@ -95,20 +93,52 @@ class UNIWeb_Client {
 	}
 
 	/**
- 	* Clear section
- 	* @param array $params parameters to add a new section items includes 
- 	* ID: unique identifier of member ex: macrini@proximify.ca
- 	* Resources: path requested ex: cv/education/degrees
- 	* Filter(optinal): filtering settings ex: login_name => 'mert@proximify.ca'
+ 	 * Clear section
+ 	 * @param array $params parameters to add a new section items includes 
+ 	 * ID: unique identifier of member ex: macrini@proximify.ca
+ 	 * Resources: path requested ex: cv/education/degrees
+ 	 * Filter(optinal): filtering settings ex: login_name => 'mert@proximify.ca'
  	*/
 	public function clear($params)
 	{
-		if (empty($params))
-		{
+		if (!$params)
 			throw new Exception('Invalid parameter.');
-		}
 
-		$request = array('action' => 'clear', 'id'=> $params['id'], 'resources' => $params['resources']);
+		$request = array(
+			'action' => 'clear', 
+			'id'=> $params['id'], 
+			'resources' => $params['resources']
+		);
+		
+		return $this->sendRequest($request);
+	}
+	
+	protected function normalizeParameters($params)
+	{
+		if (!$params || !is_array($params))
+			throw new Exception('Invalid parameters');
+		
+		if (empty($params['id']))
+			throw new Exception('Missing "id" property');
+			
+		if (empty($params['resources']))
+			throw new Exception('Missing "resources" property');
+		
+		if (empty($params['contentType']))
+			$params['contentType'] = 'members';
+		
+		return $params;
+	}
+	
+	/**
+ 	 * Update profile picture
+ 	 * @param array $params 
+ 	*/
+	public function updatePicture($params)
+	{
+		$request = $this->normalizeParameters($params);
+		
+		$request['action'] = 'updatePicture';
 		
 		return $this->sendRequest($request);
 	}
@@ -119,10 +149,8 @@ class UNIWeb_Client {
  	*/
 	public function getInfo($resources)
 	{
-		if (empty($resources))
-		{
+		if (!$resources)
 			throw new Exception('Resource cannot be empty.');
-		}
 
 		$request = array('action' => 'info', 'resources' => $resources);
 

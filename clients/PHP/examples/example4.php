@@ -90,3 +90,5 @@ if ($response)
 	echo "Items were added for user '$id'";
 else
 	echo "Error: Could not add  new items for user '$id'";
+
+?>

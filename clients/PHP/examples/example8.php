@@ -11,10 +11,10 @@ $client = UNIWeb_Client::getClient(CLIENT_NAME, CLIENT_SECRET, HOMEPAGE);
 
 $id = 'macrini@proximify.ca';
 $resources = array('cv/user_profile');
-$params = array('id' => $id, 'resources' => $resources);
+$readParams = array('id' => $id, 'resources' => $resources);
 
-$response = $client->read($params);
-var_dump($response);
+$response = $client->read($readParams);
+$client->printResponse($response, 'User profile in CV before "edit"');
 
 $currentInterests = array();
 
@@ -25,10 +25,15 @@ $billingualStr = array(
 );
 
 $resources = array('cv/user_profile' => array('research_interests' => $billingualStr));
-$params = array('id' => $id, 'resources' => $resources);
-$response = $client->edit($params);
+$editParams = array('id' => $id, 'resources' => $resources);
+$response = $client->edit($editParams);
 
 if ($response)
 	echo "The CV user profile section of user '$id' was modified successfully";
 else
 	echo "Error: Could not modify the membership info of user '$id'";
+
+$response = $client->read($readParams);	
+$client->printResponse($response, 'User profile in CV after "edit"');
+
+?>

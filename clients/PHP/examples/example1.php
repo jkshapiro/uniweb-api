@@ -66,3 +66,4 @@ $tableData = implode('', $items);
 // Include the full page HTML. In there, we echo the value of $tableData.
 include('assets/example1/example1_template.html');
 
+?>

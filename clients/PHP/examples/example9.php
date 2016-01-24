@@ -19,3 +19,5 @@ $response = $client->read($params);
 
 echo '<html lang="en"><head><meta charset="utf-8"></head>';
 echo '<body><pre>' . print_r($response, true) . '</pre></body>';
+
+?>

@@ -46,3 +46,5 @@ foreach ($interests as $tuple)
 
 // Show the list
 $client->printResponse($researchInterestsList, 'List of interests');
+
+?>

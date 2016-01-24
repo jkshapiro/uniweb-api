@@ -2,6 +2,10 @@
 require_once('../uniweb_client.php');
 require_once('credentials.php'); 
 
+/**
+ * In this example we will change the profile picture of a user.
+ */
+ 
 // Get authorized API client
 $client = UNIWeb_Client::getClient(CLIENT_NAME, CLIENT_SECRET, HOMEPAGE);
 
@@ -14,16 +18,10 @@ $id = 'macrini@proximify.ca';
 // we don't send a middle name, and the user had set a middle name, then the existing
 // middle name will be unchanged.
 
-$resources = array('profile/membership_information' => 
-	array("first_name"=> "Juan",
-		"last_name"=> "Pedro",
-		"account_type"=> 1,
-		"position_title"=> 1,
-		"email"=>"dmac"
-	));
+$resources = array('profile/picture' => array("url"=> "http://socialsciences.uottawa.ca/sites/default/files/public/fss_dean-69111_new.png"));
 
 $params = array('id' => $id, 'resources' => $resources);
-$response = $client->edit($params);
+$response = $client->updatePicture($params);
 
 if ($response)
 	echo "The membership info of user '$id' was modified successfully";

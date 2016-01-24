@@ -24,3 +24,5 @@ $client->printResponse($response, 'Fields info');
 $resources = array('cv/contributions/presentations/_fields_/main_audience/invited');
 $response = $client->getOptions($resources);
 $client->printResponse($response, 'Fields options');
+
+?>

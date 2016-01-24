@@ -86,3 +86,5 @@ if ($response)
 	echo "'$interest1' and '$interest2[0]' were added as new interests for user '$id'";
 else
 	echo "Error: Could not add as new interests for user '$id'";
+
+?>

@@ -4,7 +4,7 @@ require_once('credentials.php');
 
 /**
  * In this example we will add/edit the values of "select" fields. That is, fields that
- * offere a dropdown of options to the users. In this example, we will pass the options as
+ * offer a dropdown of options to the users. In this example, we will pass the options as
  * text instead of reetrieving the IDs of the options first.
  */
 
@@ -28,3 +28,5 @@ $params = array('id' => $id, 'resources' => $resources);
 $response = $client->read($params);
 
 echo ($response) ? 'Done!' : 'Error';
+
+?>
