@@ -11,14 +11,13 @@ $filter = array('loginName' => 'macrini@proximify.ca');
 $params = array('resources' => $resources, 'filter' => $filter);
 
 // Retrieve the data from the server
-// For Bruno: I added a second parameter so that the response is an array instead of an
-// object. I find that easier to deal with.
+// The read() function has a second parameter. If true, the response is an array instead 
+// of an object. 
 $response = $client->read($params, true);
-var_dump($response);
+$client->printResponse($response, 'Response is an array when read($params, true)');
 
 if (!$response)
 	throw new Exception('Count not find the member');
-
 
 // Since we requested one member, we know that the first key is the ID of the member
 $ids = array_keys($response);
@@ -26,7 +25,7 @@ $memberId = $ids[0];
 $memberData = $response[$memberId];
 
 // Show the data
-var_dump($memberData);
+$client->printResponse($response, 'Member data obtained by using a filter');
 
 $info = $memberData['profile/membership_information'];
 $interests = $memberData['profile/research_interests'];
@@ -34,7 +33,7 @@ $interests = $memberData['profile/research_interests'];
 $firstName = $info['first_name'];
 $lastName = $info['last_name'];
 
-// We can iteraate over the interests. Each interest is an array with ID, name the the
+// We can iterate over the interests. Each interest is an array with ID, name the the
 // research there, name of the parent of the reseach them, name of the grand parent of
 // the research theme, and so on. Here I'm just using the base name of the interest.
 
@@ -46,4 +45,4 @@ foreach ($interests as $tuple)
 }
 
 // Show the list
-var_dump($researchInterestsList);
+$client->printResponse($researchInterestsList, 'List of interests');

@@ -368,6 +368,14 @@ class UNIWeb_Client {
 			throw new Exception('Homepage cannot be empty!');
 		}
 	}
+	
+	static public function printResponse($response, $title = false)
+	{
+		if ($title)
+			echo '<h3>' . $title . '</h3>';
+			
+		echo '<pre>' . print_r($response, true) . '</pre>';
+	}
 }
 
 ?>

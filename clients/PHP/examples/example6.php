@@ -5,10 +5,8 @@ require_once('credentials.php');
 // Get authorized API client
 $client = UNIWeb_Client::getClient(CLIENT_NAME, CLIENT_SECRET, HOMEPAGE);
  
-// Prepare a 'read' request for Professor Sylvie Nadeau. Is that OK?
 // When selecting one member, you can use the property 'id' instead of a filter. In that
 // case, the response won't be an array of members but just the member that you need
-
 $id = 'macrini@proximify.ca';
 $resources = array('profile/membership_information', 'profile/research_interests');
 $params = array('id' => $id, 'resources' => $resources);
@@ -26,7 +24,7 @@ if (!$response)
 
 // It's now easy to get the member's data
 $memberData = $response;
-var_dump($memberData);
+$client->printResponse($response, 'Member data requested by ID (the fastest method)');
 
 $info = $memberData['profile/membership_information'];
 $interests = $memberData['profile/research_interests'];
@@ -46,4 +44,4 @@ foreach ($interests as $tuple)
 }
 
 // Show the list
-var_dump($researchInterestsList);
+$client->printResponse($researchInterestsList, 'List of interests');

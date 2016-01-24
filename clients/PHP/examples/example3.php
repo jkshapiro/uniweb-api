@@ -13,16 +13,14 @@ $client = UNIWeb_Client::getClient(CLIENT_NAME, CLIENT_SECRET, HOMEPAGE);
 // Request the information about a section, its field names and the type of each field. 
 $resources = array('cv/contributions/presentations');
 $response = $client->getInfo($resources);
-var_dump($response);
+$client->printResponse($response, 'Section info');
 
 // Request the information for some specific fields in the section.
 $resources = array('cv/contributions/presentations/_fields_/main_audience/invited');
 $response = $client->getInfo($resources);
-var_dump($response);
+$client->printResponse($response, 'Fields info');
 
 // Request the valid options for some LOV fields.
 $resources = array('cv/contributions/presentations/_fields_/main_audience/invited');
 $response = $client->getOptions($resources);
-
-// Print the response
-echo '<pre>' . print_r($response, true) . '</pre>';
+$client->printResponse($response, 'Fields options');
