@@ -19,12 +19,13 @@ $id = 'macrini@proximify.ca';
 // we don't send a middle name, and the user had set a middle name, then the existing
 // middle name will be unchanged.
 
-$resources = array('profile/picture' => array(
-	"url"=> "http://socialsciences.uottawa.ca/sites/default/files/public/fss_dean-69111_new.png")
-);
+$imageUrl = 'http://socialsciences.uottawa.ca/sites/default/files/public/fss_dean-69111_new.png';
 
-$params = array('id' => $id, 'resources' => $resources);
-$response = $client->updatePicture($params);
+$resources = array('profile/picture' => array('url' => $imageUrl));
+
+$request = array('id' => $id, 'resources' => $resources);
+
+$response = $client->updatePicture($request);
 
 if ($response)
 	echo "The membership info of user '$id' was modified successfully";

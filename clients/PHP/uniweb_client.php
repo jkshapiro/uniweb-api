@@ -115,56 +115,58 @@ class UNIWeb_Client
 		return $this->sendRequest($request);
 	}
 	
-	protected function normalizeParameters($params)
+	protected function normalizeRequest($request)
 	{
-		if (!$params || !is_array($params))
-			throw new Exception('Invalid parameters');
+		if (!$request || !is_array($request))
+			throw new Exception('Invalid request parameters');
 		
-		if (empty($params['id']))
-			throw new Exception('Missing "id" property');
+		//if (empty($request['id']))
+		//	throw new Exception('Missing "id" property in request');
 			
-		if (empty($params['resources']))
-			throw new Exception('Missing "resources" property');
+		if (empty($request['resources']))
+			throw new Exception('Missing "resources" property in request');
 		
-		if (empty($params['contentType']))
-			$params['contentType'] = 'members';
+		if (empty($request['contentType']))
+			$request['contentType'] = 'members';
 		
-		return $params;
+		return $request;
 	}
 	
 	/**
  	 * Update profile picture
  	 * @param array $params 
  	*/
-	public function updatePicture($params)
+	public function updatePicture($request)
 	{
-		$request = $this->normalizeParameters($params);
+		$request = $this->normalizeRequest($request);
 		
 		$request['action'] = 'updatePicture';
 		
-		foreach ($request['resources'] as $resourcePath => &$imageParams)
-		{
-			if (isset($imageParams['filename']))
-			{
-				$imgPath = $imageParams['filename'];
-				$mimeType = 'image/' . pathinfo($imgPath, PATHINFO_EXTENSION);
-				$this->addFileObject($request, $resourcePath, $imgPath, $mimeType);
-				$imageParams['filename'] = basename($imgPath);
-			}
-		}
 		//self::printResponse($request);		
 		return $this->sendRequest($request);
 	}
 	
-	protected function addFileObject(&$request, $key, $path, $mimeType)
+	/**
+ 	 * Adds a file to the given request.
+ 	 *
+ 	 * @param array $name A unique name for the file. Any name is without dots is fine. 
+ 	*/
+	public function addFileAttachment(&$request, $name, $path, $mimeType)
 	{
 		if (!is_readable($path))
 			throw new Exception("Cannot read file at $path");
-			
+		
+		// Make sure that the name has no periods because PHP converts them to '_'
+		// when used as the file names.	
+		if (strpos($name, '.') !== false)
+			throw new Exception("Attachment name can't contain periods: $name");
+	
+		$request = $this->normalizeRequest($request);
+				
 		if (!isset($request[self::FILES]))
 			$request[self::FILES] = array();
 				
-		$request[self::FILES][$key] = RemoteConnection::createFileObject($path, $mimeType);
+		$request[self::FILES][$name] = RemoteConnection::createFileObject($path, $mimeType);
 	}
 
 	/**

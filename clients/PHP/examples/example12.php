@@ -19,12 +19,17 @@ $id = 'macrini@proximify.ca';
 // we don't send a middle name, and the user had set a middle name, then the existing
 // middle name will be unchanged.
 
-$resources = array('profile/picture' => array(
-	"filename" => "/Users/Shared/EEM-small-size.png")
-);
+$imagePath = '/Users/Shared/EEM-small-size.png';
+$mimeType = 'image/' . pathinfo($imagePath, PATHINFO_EXTENSION);
+$fileName = 'profilePicture'; // A unique name for the file (with no periods in it)
 
-$params = array('id' => $id, 'resources' => $resources);
-$response = $client->updatePicture($params);
+$resources = array('profile/picture' => array('attachment' => $fileName));
+
+$request = array('id' => $id, 'resources' => $resources);
+
+$client->addFileAttachment($request, $fileName, $imagePath, $mimeType);
+
+$response = $client->updatePicture($request);
 
 if ($response)
 	echo "The membership info of user '$id' was modified successfully";
