@@ -6,6 +6,11 @@ class UNIWeb_Client
 {
 	const FILES = '_files_';
 	
+	/**
+ 	 * Constructs a UNIWeb client with given credentials. There is also a helper static
+ 	 * function, getClient(), that can be used by passing thecredential parameters
+ 	 * as individual function arguments in order to construct a client object.
+ 	 */
 	function __construct($credentials)
 	{	
 		$this->assertClientParams($credentials);
@@ -17,128 +22,81 @@ class UNIWeb_Client
 		$this->conn = new RemoteConnection();
 	}
 	
-	static function getClient($clientName, $clientSecret, $homepage)
-	{
-		$credentials = array(
-			'clientName' => $clientName, 
-			'clientSecret' => $clientSecret, 
-			'homepage' => $homepage
-		);
-		
-		return new self($credentials);
-	}
-
 	/**
- 	* Add a new section item
- 	* @param array $params parameters to add a new section items includes 
- 	* ID: unique identifier of member ex: macrini@proximify.ca
- 	* Resources: path requested ex: cv/education/degrees
- 	*/
-	public function add($params)
+ 	 * Add a new section item
+ 	 * @param array $params parameters to add a new section items includes 
+ 	 * ID: unique identifier of member ex: macrini@proximify.ca
+ 	 * Resources: path requested ex: cv/education/degrees
+ 	 */
+	public function add($request)
 	{
-		if (empty($params))
-		{
-			throw new Exception('Invalid parameter.');
-		}
+		self::assertValidRequest($request);
+		self::assertHasId($request);
 
-		$request = array('action' => 'add', 'id' => $params['id'], 
-			'resources' => $params['resources']);
+		$request['action'] = 'add';
 		
 	 	return $this->sendRequest($request);
 	}
 
-
 	/**
- 	* Edit a section item
- 	* @param array $params parameters to add a new section items includes 
- 	* ID: unique identifier of member ex: macrini@proximify.ca
- 	* Resources: path requested ex: cv/education/degrees
- 	*/
-	public function edit($params)
+ 	 * Edit a section item
+ 	 * @param array $params parameters to add a new section items includes 
+ 	 * ID: unique identifier of member ex: macrini@proximify.ca
+ 	 * Resources: path requested ex: cv/education/degrees
+ 	 */
+	public function edit($request)
 	{
-		if (empty($params))
-		{
-			throw new Exception('Invalid parameter.');
-		}
-
-		$request = array('action' => 'edit', 'id' => $params['id'], 'resources' => $params['resources']);
+		self::assertValidRequest($request);
+		self::assertHasId($request);
+		
+		$request['action'] = 'edit';
 
 		return $this->sendRequest($request);
 	}
 
-
 	/**
- 	* Read a section item
- 	* @param array $params parameters to add a new section items includes 
- 	* ID: unique identifier of member ex: macrini@proximify.ca
- 	* Resources: path requested ex: cv/education/degrees
- 	* Filter(optinal): filtering settings ex: login_name => 'mert@proximify.ca'
- 	* @param bool $assoc returns array if it is true, otherwise json.
- 	*/
-	public function read($params, $assoc=false)
+ 	 * Read a section item
+ 	 * @param array $params parameters to add a new section items includes 
+ 	 * ID: unique identifier of member ex: macrini@proximify.ca
+ 	 * Resources: path requested ex: cv/education/degrees
+ 	 * Filter(optinal): filtering settings ex: login_name => 'mert@proximify.ca'
+ 	 * @param bool $assoc returns array if it is true, otherwise json.
+ 	 */
+	public function read($request, $assoc=false)
 	{
-		if (!$params)
-			throw new Exception('Invalid parameter.');
+		self::assertValidRequest($request);
 
-		$request = array('action' => 'read', 'resources' => $params['resources']);
-		
-		if (isset($params['id']))
-		{
-			$request['id'] = $params['id'];
-		}
-		elseif (isset($params['filter']))
-		{
-			$request['filter'] = $params['filter'];
-		} 
+		$request['action'] = 'read';
 		
 		return $this->sendRequest($request, $assoc);
 	}
 
 	/**
- 	 * Clear section
+ 	 * Clear section.
+ 	 *
  	 * @param array $params parameters to add a new section items includes 
  	 * ID: unique identifier of member ex: macrini@proximify.ca
  	 * Resources: path requested ex: cv/education/degrees
  	 * Filter(optinal): filtering settings ex: login_name => 'mert@proximify.ca'
- 	*/
-	public function clear($params)
-	{
-		if (!$params)
-			throw new Exception('Invalid parameter.');
+ 	 */
+	public function clear($request)
+	{	
+		self::assertValidRequest($request);
+		self::assertHasId($request);
 
-		$request = array(
-			'action' => 'clear', 
-			'id'=> $params['id'], 
-			'resources' => $params['resources']
-		);
+		$request['action'] = 'clear';
 		
 		return $this->sendRequest($request);
 	}
-	
-	protected function normalizeRequest($request)
-	{
-		if (!$request || !is_array($request))
-			throw new Exception('Invalid request parameters');
 		
-		//if (empty($request['id']))
-		//	throw new Exception('Missing "id" property in request');
-			
-		if (empty($request['resources']))
-			throw new Exception('Missing "resources" property in request');
-		
-		if (empty($request['contentType']))
-			$request['contentType'] = 'members';
-		
-		return $request;
-	}
-	
 	/**
  	 * Update profile picture
  	 * @param array $params 
- 	*/
+ 	 */
 	public function updatePicture($request)
 	{
-		$request = $this->normalizeRequest($request);
+		self::assertValidRequest($request);
+		self::assertHasId($request);
 		
 		$request['action'] = 'updatePicture';
 		
@@ -150,7 +108,7 @@ class UNIWeb_Client
  	 * Adds a file to the given request.
  	 *
  	 * @param array $name A unique name for the file. Any name is without dots is fine. 
- 	*/
+ 	 */
 	public function addFileAttachment(&$request, $name, $path, $mimeType)
 	{
 		if (!is_readable($path))
@@ -161,7 +119,7 @@ class UNIWeb_Client
 		if (strpos($name, '.') !== false)
 			throw new Exception("Attachment name can't contain periods: $name");
 	
-		$request = $this->normalizeRequest($request);
+		self::assertValidRequest($request);
 				
 		if (!isset($request[self::FILES]))
 			$request[self::FILES] = array();
@@ -170,13 +128,13 @@ class UNIWeb_Client
 	}
 
 	/**
- 	* Get section info
- 	* @param (string, array) $resources path requested ex: cv/education/degrees
- 	*/
+ 	 * Get section info
+ 	 * @param (string, array) $resources path requested ex: cv/education/degrees
+ 	 */
 	public function getInfo($resources)
 	{
 		if (!$resources)
-			throw new Exception('Resource cannot be empty.');
+			throw new Exception('Resources cannot be empty');
 
 		$request = array('action' => 'info', 'resources' => $resources);
 
@@ -184,15 +142,13 @@ class UNIWeb_Client
 	}
 
 	/**
- 	* Get field options
- 	* @param (string, array) $resources path requested ex: cv/education/degrees
- 	*/
+ 	 * Get field options.
+ 	 * @param (string, array) $resources path requested ex: cv/education/degrees
+ 	 */
 	public function getOptions($resources)
 	{
-		if (empty($resources))
-		{
-			throw new Exception('Resource cannot be empty.');
-		}
+		if (!$resources)
+			throw new Exception('Resources cannot be empty');
 
 		$request = array('action' => 'options', 'resources' => $resources);
 
@@ -272,7 +228,6 @@ class UNIWeb_Client
 	/**
 	 * Returns list of Fields.
 	 */
-
 	public function getFields()
 	{
 		$request = array('action' => 'getFields');
@@ -428,22 +383,65 @@ class UNIWeb_Client
 		);
 	}
 
-	public function assertClientParams($credentials)
+	/**
+ 	 * Ensures that all mandatory the credential properties are set.
+ 	 */
+	static public function assertClientParams($credentials)
 	{
+		if (!$credentials || !is_array($credentials))
+			throw new Exception('Invalid credentials');
+		
 		if (empty($credentials['clientName']))
-		{
-			throw new Exception('Client name cannot be empty!');
-		}	
-		elseif(empty($credentials['clientSecret']))
-		{
-			throw new Exception('Client secret cannot be empty!');
-		}
-		elseif(empty($credentials['homepage']))
-		{
-			throw new Exception('Homepage cannot be empty!');
-		}
+			throw new Exception('Client name cannot be empty');
+		
+		if (empty($credentials['clientSecret']))
+			throw new Exception('Client secret cannot be empty');
+		
+		if (empty($credentials['homepage']))
+			throw new Exception('Homepage cannot be empty');
 	}
 	
+	/**
+ 	 * Ensures that the request is an array with all manadatory properties set. It does
+ 	 * not check for the presence of an 'id' property because that is optional. To check
+ 	 * for that, call assertHasId() after this function.
+ 	 */
+	static public function assertValidRequest($request)
+	{
+		if (!$request || !is_array($request))
+			throw new Exception('Invalid request parameters');
+			
+		if (empty($request['resources']))
+			throw new Exception('Empty "resources" property in request');
+	}
+	
+	/**
+ 	 * Ensures that the request has a 'id' property. Should be called after 
+ 	 * assertValidRequest().
+ 	 */
+	static public function assertHasId($request)
+	{
+		if (empty($request['id']))
+			throw new Exception('Missing "id" property in request');
+	}
+	
+	/**
+	 * Helper function to create an object of this class with given credentials.
+	 */
+	static function getClient($clientName, $clientSecret, $homepage)
+	{
+		$credentials = array(
+			'clientName' => $clientName, 
+			'clientSecret' => $clientSecret, 
+			'homepage' => $homepage
+		);
+		
+		return new self($credentials);
+	}
+	
+	/**
+	 * Helper function to print out a response object in a deadable way.
+	 */
 	static public function printResponse($response, $title = false)
 	{
 		if ($title)
