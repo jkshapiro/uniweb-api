@@ -3,8 +3,8 @@ require_once('../uniweb_client.php');
 require_once('credentials.php'); 
 
 /**
- * In this example we will change the profile picture of a user with an image given
- * as a URL. If you want to use a file instead, please read the next example file.
+ * In this example we will change the profile picture of a user with an image given as a
+ * local file path. If you want to use a URL instead, please read the previous example file.
  */
  
 // Get authorized API client
@@ -20,7 +20,7 @@ $id = 'macrini@proximify.ca';
 // middle name will be unchanged.
 
 $resources = array('profile/picture' => array(
-	"url"=> "http://socialsciences.uottawa.ca/sites/default/files/public/fss_dean-69111_new.png")
+	"filename" => "/Users/Shared/EEM-small-size.png")
 );
 
 $params = array('id' => $id, 'resources' => $resources);

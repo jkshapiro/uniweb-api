@@ -2,8 +2,10 @@
 
 require('remote_connection.php');
 
-class UNIWeb_Client {
-
+class UNIWeb_Client 
+{
+	const FILES = '_files_';
+	
 	function __construct($credentials)
 	{	
 		$this->assertClientParams($credentials);
@@ -140,7 +142,29 @@ class UNIWeb_Client {
 		
 		$request['action'] = 'updatePicture';
 		
+		foreach ($request['resources'] as $resourcePath => &$imageParams)
+		{
+			if (isset($imageParams['filename']))
+			{
+				$imgPath = $imageParams['filename'];
+				$mimeType = 'image/' . pathinfo($imgPath, PATHINFO_EXTENSION);
+				$this->addFileObject($request, $resourcePath, $imgPath, $mimeType);
+				$imageParams['filename'] = basename($imgPath);
+			}
+		}
+		//self::printResponse($request);		
 		return $this->sendRequest($request);
+	}
+	
+	protected function addFileObject(&$request, $key, $path, $mimeType)
+	{
+		if (!is_readable($path))
+			throw new Exception("Cannot read file at $path");
+			
+		if (!isset($request[self::FILES]))
+			$request[self::FILES] = array();
+				
+		$request[self::FILES][$key] = RemoteConnection::createFileObject($path, $mimeType);
 	}
 
 	/**
@@ -337,13 +361,34 @@ class UNIWeb_Client {
 	 */
 	protected function getResource($request) 
 	{
-		$resourceURL = $this->homepage . 'api/resource.php?access_token='
-		 . $this->accessToken['token'];
+		$resourceURL = $this->homepage . 'api/resource.php?access_token=' . 
+			$this->accessToken['token'];
 
+		$files = array();
+		
 		if (is_array($request))
+		{
+			// If the request has files to send, that should not be converted to JSON
+			if (!empty($request[self::FILES]))
+			{
+				foreach ($request[self::FILES] as $key => $value)
+				{
+					if ($value instanceof CURLFile)
+					{
+						$files[$key] = $value;
+						unset($request[self::FILES][$key]);
+					}
+				}	
+			}
+
 			$request = json_encode($request);
+		}
 			
 		$postFields = array('request' => $request);
+
+		if ($files)
+			$postFields = array_merge($postFields, $files);
+		
 		$result = $this->conn->post($resourceURL, $postFields);
 
 		return $result;
